@@ -81,12 +81,19 @@ export default function App() {
   const handleCreateFile = () => {
     if (!newFileName) return;
     const name = newFileName.endsWith('.sol') ? newFileName : `${newFileName}.sol`;
-    const newFile = { name, content: DEFAULT_CODE };
+    const newFile = { name, content: '' };
     setFiles([...files, newFile]);
     setActiveFileIndex(files.length);
     setShowNewFileModal(false);
     setNewFileName('');
-    addLog(`Created file: ${name}`);
+    addLog(`Created empty file: ${name}`);
+  };
+
+  const handleFileContentChange = (newContent: string) => {
+    if (activeFileIndex === null) return;
+    const updatedFiles = [...files];
+    updatedFiles[activeFileIndex].content = newContent;
+    setFiles(updatedFiles);
   };
 
   const handleCompile = () => {
@@ -330,20 +337,24 @@ export default function App() {
           </div>
 
           {/* Editor */}
-          <div className="flex-grow bg-[#1a1a1a] p-4 font-mono text-sm overflow-auto relative">
+          <div className="flex-grow bg-[#1a1a1a] flex font-mono text-sm overflow-hidden relative">
             {activeFileIndex !== null ? (
-              <div className="flex">
-                <div className="w-10 text-[#444] text-right pr-4 select-none border-r border-[#222] mr-4">
-                  {Array.from({ length: 30 }).map((_, i) => (
+              <>
+                <div className="w-10 text-[#444] text-right pr-4 select-none border-r border-[#222] mr-4 pt-4 shrink-0">
+                  {Array.from({ length: 50 }).map((_, i) => (
                     <div key={i}>{i + 1}</div>
                   ))}
                 </div>
-                <pre className="text-[#d1d1d1] whitespace-pre-wrap leading-relaxed">
-                  {files[activeFileIndex].content}
-                </pre>
-              </div>
+                <textarea
+                  value={files[activeFileIndex].content}
+                  onChange={(e) => handleFileContentChange(e.target.value)}
+                  className="flex-grow bg-transparent text-[#d1d1d1] p-4 focus:outline-none resize-none leading-relaxed h-full w-full"
+                  placeholder="// Paste your Solidity code here..."
+                  spellCheck={false}
+                />
+              </>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-[#444] space-y-4">
+              <div className="h-full w-full flex flex-col items-center justify-center text-[#444] space-y-4">
                 <Zap className="w-16 h-16 opacity-10" />
                 <p className="text-sm font-medium">Select or create a file to start coding</p>
               </div>
