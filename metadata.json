@@ -1,5 +1,5 @@
 {
-  "name": "Remix Flash IDE",
-  "description": "A professional Solidity IDE for deploying contracts on Tron and BNB blockchains with flash token generation capabilities.",
+  "name": "Remix USDT IDE",
+  "description": "A professional Solidity IDE for deploying USDT contracts on Tron and BNB blockchains.",
   "requestFramePermissions": []
 }
